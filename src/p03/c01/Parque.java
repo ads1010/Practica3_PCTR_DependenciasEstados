@@ -93,7 +93,11 @@ public class Parque implements IParque{
 	protected void checkInvariante() {
 		assert sumarContadoresPuerta() == contadorPersonasTotales : "INV: La suma de contadores de las puertas debe ser igual al valor del contador del parte";
 		// TODO 
+		assert sumarContadoresPuerta() >= 0 : "El parque esta vacio";
 		// TODO
+		assert sumarContadoresPuerta() <= aforoMax : "Se ha superado el aforo maximo";
+		
+		
 		
 		
 		
