@@ -7,19 +7,22 @@ public class Parque implements IParque{
 
 
 	// TODO 
+	private int aforoMax;
+	
 	private int contadorPersonasTotales;
 	private Hashtable<String, Integer> contadoresPersonasPuerta;
 	
 	
-	public Parque() {	// TODO
+	public Parque(int aforo) {	// TODO
 		contadorPersonasTotales = 0;
 		contadoresPersonasPuerta = new Hashtable<String, Integer>();
 		// TODO
+		this.aforoMax = aforo;
 	}
 
 
 	@Override
-	public void entrarAlParque(String puerta){		// TODO
+	public synchronized void entrarAlParque(String puerta){		// TODO
 		
 		// Si no hay entradas por esa puerta, inicializamos
 		if (contadoresPersonasPuerta.get(puerta) == null){
@@ -27,7 +30,7 @@ public class Parque implements IParque{
 		}
 		
 		// TODO
-				
+		comprobarAntesDeEntrar();		
 		
 		// Aumentamos el contador total y el individual
 		contadorPersonasTotales++;		
@@ -37,17 +40,18 @@ public class Parque implements IParque{
 		imprimirInfo(puerta, "Entrada");
 		
 		// TODO
-		
+		checkInvariante();
 		
 		// TODO
+		this.notifyAll();
 		
 	}
 	
 	// 
-	// TODO Método salirDelParque
+	// TODO Metodo salirDelParque
 	//
 	@Override
-	public void salirDelParque(String puerta) {
+	public synchronized void salirDelParque(String puerta) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -85,12 +89,28 @@ public class Parque implements IParque{
 		//
 		// TODO
 		//
+		while(contadorPersonasTotales>=aforoMax) { //El aforo esta completo
+			try {
+				this.wait(); //La entrada debe esperar
+			}catch (InterruptedException e) {
+				e.printStackTrace();
+				
+			}
+		}
 	}
 
 	protected void comprobarAntesDeSalir(){		// TODO
 		//
 		// TODO
 		//
+		while(contadorPersonasTotales == 0) { //El parque esta vacio
+			try {
+				this.wait(); //La salida debe esperar
+			}catch (InterruptedException e) {
+				e.printStackTrace();
+				
+			}
+		}
 	}
 
 
