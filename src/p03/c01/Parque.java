@@ -53,7 +53,21 @@ public class Parque implements IParque{
 	@Override
 	public synchronized void salirDelParque(String puerta) {
 		// TODO Auto-generated method stub
+		if (contadoresPersonasPuerta.get(puerta) == null){
+			contadoresPersonasPuerta.put(puerta, 0);
+		}
+		comprobarAntesDeSalir();
 		
+		// Reducimos el contador total y el individual
+		contadorPersonasTotales--;		
+		contadoresPersonasPuerta.put(puerta, contadoresPersonasPuerta.get(puerta)-1);
+		
+		// Imprimimos el estado del parque
+		imprimirInfo(puerta, "Salida");
+		
+		checkInvariante();
+		
+		this.notifyAll();
 	}
 	
 	private void imprimirInfo (String puerta, String movimiento){
